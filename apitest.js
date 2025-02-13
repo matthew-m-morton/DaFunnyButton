@@ -17,4 +17,4 @@ async function getJoke() {
     }
 }
 
-document.getElementById("mamabutton").addEventListener("click", getJoke());
+document.getElementById("mamabutton").addEventListener("click", () => {getJoke()});
