@@ -12,3 +12,11 @@ https://icanhazdadjoke.com/
 
 Yo Mama API
 https://www.yomama-jokes.com/docs/?ref=freepublicapis.com
+
+
+
+tasks
+yo mamma
+chuck norris
+
+excel for categories
