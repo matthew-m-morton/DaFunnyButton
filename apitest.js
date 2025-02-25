@@ -36,6 +36,18 @@ async function getDadJoke(){
 
 document.querySelector(".dad-joke > button").addEventListener("click", () => {getDadJoke()});
 
+async function getChuckJoke() {
+    try {
+        const response = await fetch('https://api.chucknorris.io/jokes/random')
+        const data = await response.json()
 
+        document.getElementById("jokeContainer").innerText = data.value;
+    }
+    catch {
+        console.error("Error fetching Chuck Norris joke:", error);
+        document.getElementById("jokeContainer").innerText = "Failed to load a Chuck Norris joke. Try again!";
+    }
+}
+document.getElementById("chuckbutton").addEventListener("click", () => getChuckJoke())
 
 
