@@ -35,3 +35,7 @@ async function getDadJoke(){
 }
 
 document.querySelector(".dad-joke > button").addEventListener("click", () => {getDadJoke()});
+
+
+
+
