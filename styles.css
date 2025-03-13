@@ -101,3 +101,41 @@ header {
     margin-top: 100px;
     text-align: center;
 }
+
+#vacuum-man {
+    position: absolute;
+    bottom: -40px; /* Slightly below the joke */
+    left: -100px;
+    width: 100px;
+    transform: scaleX(-1); /* Makes the sweeper face the right direction */
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.vacuum-animation {
+    animation: vacuum 2s forwards;
+}
+
+@keyframes vacuum {
+    0% { left: -100px; opacity: 1; }
+    50% { left: 100%; opacity: 1; }
+    100% { left: 100%; opacity: 0; }
+}
+
+.joke-fade-out {
+    animation: fadeOut 1.5s forwards;
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+
+.joke-fade-in {
+    animation: fadeIn 1.5s forwards;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
