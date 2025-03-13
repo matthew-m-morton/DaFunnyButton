@@ -2,6 +2,10 @@ async function animateVacuumManAndShowJoke(jokeText) {
     const jokeElement = document.getElementById("jokeContainer");
     const vacuumManElement = document.getElementById("vacuum-man");
 
+    vacuumManElement.classList.remove("vacuum-animation");
+
+    void vacuumManElement.offsetHeight;
+
     // Start joke fade-out and sweeper animation
     jokeElement.classList.add("joke-fade-out");
     vacuumManElement.classList.add("vacuum-animation");

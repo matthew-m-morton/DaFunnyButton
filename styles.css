@@ -98,7 +98,7 @@ header {
 }
 
 #jokeContainer {
-    margin-top: 100px;
+    margin: 100px;
     text-align: center;
 }
 
@@ -107,10 +107,12 @@ header {
     transform: scaleX(-1); /* Makes the sweeper face the right direction */
     opacity: 0;
     transition: opacity 0.5s ease;
+    z-index: 10;
+    bottom: 370px;
 }
 
 .vacuum-animation {
-    animation: vacuum 2s forwards;
+    animation: vacuum 5s forwards;
 }
 
 @keyframes vacuum {
