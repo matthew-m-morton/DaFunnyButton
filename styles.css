@@ -104,9 +104,6 @@ header {
 
 #vacuum-man {
     position: absolute;
-    bottom: -40px; /* Slightly below the joke */
-    left: -100px;
-    width: 100px;
     transform: scaleX(-1); /* Makes the sweeper face the right direction */
     opacity: 0;
     transition: opacity 0.5s ease;
