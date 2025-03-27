@@ -39,6 +39,19 @@ async function getJoke() {
     }
 }
 
+async function getProgrammingJoke() {
+    try {
+        const response = await fetch("https://v2.jokeapi.dev/joke/Programming?blacklistFlags=nsfw,religious,political,racist,sexist,explicit");
+        const data = await response.json();
+
+        let joke = data.type === "single" ? data.joke : `${data.setup} - ${data.delivery}`;
+        animateVacuumManAndShowJoke(joke);
+    } catch (error) {
+        console.error("Error fetching joke:", error);
+        animateVacuumManAndShowJoke("Failed to load a joke. Try again!");
+    }
+}
+
 async function getDadJoke() {
     try {
         const response = await fetch('https://icanhazdadjoke.com/', {
@@ -64,7 +77,7 @@ async function getChuckJoke() {
 }
 
 // Button event listeners
-document.getElementById("mamabutton").addEventListener("click", getJoke);
+document.getElementById("programbutton").addEventListener("click", getProgrammingJoke);
 document.querySelector(".dad-joke > button").addEventListener("click", getDadJoke);
 document.getElementById("chuckbutton").addEventListener("click", getChuckJoke);
 
