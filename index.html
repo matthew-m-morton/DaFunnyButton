@@ -31,10 +31,28 @@
     <img id="vacuum-man" src="images/stickfigurevacuum.png" alt="Stick figure removing the previous joke">
     </div>
     <img id="vacuum-man" src="images/stickfigurevacuum.png" alt="Stick figure removing the previous joke">
-    <div class="search-container">
-        <input type="text" class="search-box" placeholder="Search...">
-        <button class="search-button">🔍</button>
-    </div>
+    <form class="search-container">
+        <p>
+            <input name="search" type="text" class="search-box" placeholder="Search...">
+            <button class="search-button" type="submit">🔍</button>
+        </p>
+        <button id="advanced">
+            Advanced Search
+        </button>
+        <p>
+            <div id="api_name" class="hide">
+                <p><strong>Select Joke Type(s):</strong></p>
+              
+                <label for="dad-joke">Dad Joke</label>
+                <input type="checkbox" id="dad-joke" name="drop" value="dad-joke"><br>
+              
+                <label for="program-joke">Programming Joke</label>
+                <input type="checkbox" id="program-joke" name="drop" value="program-joke"><br>
+              
+                <label for="chuck-joke">Chuck Norris Joke</label>
+                <input type="checkbox" id="chuck-joke" name="drop" value="chuck-joke"><br>
+            </div>              
+    </form>
     <!-- Joke of the Day Modal -->
     <div id="joke-modal" class="modal">
         <div class="modal-content">

@@ -39,3 +39,37 @@ document.addEventListener("DOMContentLoaded", function() {
     // Call the fetchJoke function
     fetchJoke();
 });
+
+function unhide_advanced(event) {
+    event.preventDefault();
+
+    const checkboxSection = document.querySelector('#api_name');
+    
+    if (checkboxSection.classList.contains('hide')) {
+        checkboxSection.classList.remove('hide')
+    } else {
+        checkboxSection.classList.add('hide')
+        const checkboxes = checkboxSection.querySelectorAll('.search-container input')
+        checkboxes.forEach(cb => cb.checked = false)
+    }
+}
+document.querySelector('#advanced').addEventListener('click', unhide_advanced)
+
+function search_query(event) {
+    event.preventDefault()
+
+    const form = document.querySelector('.search-container')
+    const query = form.search.value.trim()
+
+    const checkedTypes = Array.from(form.querySelectorAll('input[name="drop"]:checked')).map(checkbox => checkbox.value)
+
+    const type = checkedTypes.length > 0 ? checkedTypes.join(',') : "none"
+
+    if (query !== "") {
+        const url = `search.html?query=${encodeURIComponent(query)}&type=${encodeURIComponent(type)}`;
+        console.log(url);
+        window.location.href = url;
+    }
+}
+
+document.querySelector('.search-container').addEventListener('submit', search_query);
