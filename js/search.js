@@ -3,7 +3,7 @@ function search() {
 
     const query = params.get("query");
     const type = params.get("type");
-    const types = type && type.trim() !== "" ? type.split(",") : ["program-joke"];
+    const types = type && type.trim() !== "none" ? type.split(",") : ["program-joke"];
 
 
     types.forEach(type => {
@@ -21,40 +21,76 @@ function search() {
         document.querySelector('main').appendChild(div);
     });
 
-    types.forEach(t => fetch_api(query, t));
+    if (types.length > 1){
+        types.forEach(t => fetch_api(query, t, true));
+    }else{
+        types.forEach(t => fetch_api(query, t));
+    }
 }
 
 addEventListener('DOMContentLoaded', search);
 
-async function fetch_api(query, api) {
+async function fetch_api(query, api, multipleCategories = false){
     if (api === "program-joke") {
         const website = await fetch(`https://v2.jokeapi.dev/joke/Programming?blacklistFlags=nsfw,religious,political,racist,sexist,explicit&contains=${query}&amount=10`);
         const response = await website.json();
-        const output = document.querySelector('.program-joke');
-        const jokes = response.jokes || [response];
+        if (response.error !== true){
+            const output = document.querySelector('.program-joke');
+            const jokes = response.jokes || [response];
 
-        jokes.forEach((object, index) => {
-            const section = document.createElement('section');
-        
-            const count = document.createElement('h3');
-            count.textContent = `Joke #${index + 1}`;
-            section.appendChild(count);
-        
-            if (object.type === "twopart") {
-                const setup = document.createElement('p');
-                setup.textContent = `Setup: ${object.setup}`;
-                const delivery = document.createElement('p');
-                delivery.textContent = `Delivery: ${object.delivery}`;
-                section.appendChild(setup);
-                section.appendChild(delivery);
-            } else {
-                const delivery = document.createElement('p');
-                delivery.textContent = `Joke: ${object.joke}`;
-                section.appendChild(delivery);
-            }
-        
-            output.appendChild(section);
-        });        
+            jokes.forEach((object, index) => {
+                const section = document.createElement('section');                
+            
+                const count = document.createElement('h3');
+                count.classList.add(`joke${index + 1}`)
+                count.textContent = `Joke #${index + 1}`;
+                count.setAttribute("data-url", `https://v2.jokeapi.dev/joke/Programming?blacklistFlags=nsfw,religious,political,racist,sexist,explicit&idRange=${object.id}`);
+                count.addEventListener('click', event => {
+                    event.preventDefault();
+                  
+                    const url = event.currentTarget.getAttribute("data-url");
+                  
+                    let favorites = JSON.parse(localStorage.getItem("favorite_urls")) || [];
+                  
+                    const index = favorites.indexOf(url);
+                  
+                    if (index !== -1) {
+                      favorites.splice(index, 1);
+                      console.log(`Removed joke from favorites: ${url}`);
+                    } else {
+                      favorites.push(url);
+                      console.log(`Added joke to favorites: ${url}`);
+                    }
+                  
+                    localStorage.setItem("favorite_urls", JSON.stringify(favorites));
+                });
+                
+                section.appendChild(count);
+            
+                if (object.type === "twopart") {
+                    const setup = document.createElement('p');
+                    setup.textContent = `Setup: ${object.setup}`;
+                    const delivery = document.createElement('p');
+                    delivery.textContent = `Delivery: ${object.delivery}`;
+                    section.appendChild(setup);
+                    section.appendChild(delivery);
+                } else {
+                    const delivery = document.createElement('p');
+                    delivery.textContent = `Joke: ${object.joke}`;
+                    section.appendChild(delivery);
+                }
+            
+                output.appendChild(section);
+            });  
+        }else{
+            const output = document.querySelector('.program-joke');
+            const error = document.createElement('h1')
+            error.textContent = "No Jokes were found"
+            output.appendChild(error)
+            if (!multipleCategories) {
+                setTimeout(() => { window.location.href = "index.html" }, 2000);
+            }            
+        }  
     }else if (api == "dad-joke"){
         try {
             const output = document.querySelector('.dad-joke');
@@ -67,31 +103,93 @@ async function fetch_api(query, api) {
                 const section = document.createElement('section');
         
                 const count = document.createElement('h3');
+                count.classList.add(`joke${index + 1}`)
                 count.textContent = `Joke #${index + 1}`;
+                count.setAttribute("data-url", `https://icanhazdadjoke.com/j/${object.id}`);
+                count.addEventListener('click', event => {
+                    event.preventDefault();
+                  
+                    const url = event.currentTarget.getAttribute("data-url");
+                  
+                    let favorites = JSON.parse(localStorage.getItem("favorite_urls")) || [];
+                  
+                    const index = favorites.indexOf(url);
+                  
+                    if (index !== -1) {
+                      favorites.splice(index, 1);
+                      console.log(`Removed joke from favorites: ${url}`);
+                    } else {
+                      favorites.push(url);
+                      console.log(`Added joke to favorites: ${url}`);
+                    }
+                  
+                    localStorage.setItem("favorite_urls", JSON.stringify(favorites));
+                });
+
                 section.appendChild(count);
                 const delivery = document.createElement('p');
                 delivery.textContent = `Joke: ${object.joke}`;
                 section.appendChild(delivery);
                 output.appendChild(section);
             })
-        } catch (error) {
-            console.error("Error fetching joke:", error);
+        } catch (new_error) {
+            const output = document.querySelector('.program-joke');
+            const error = document.createElement('h1')
+            error.textContent = "No Jokes were found"
+            output.appendChild(error)
+            if (!multipleCategories) {
+                setTimeout(() => { window.location.href = "index.html" }, 2000);
+            }
+            
         }
     }else{
         const output = document.querySelector('.chuck-joke');
         const website = await fetch(`https://api.chucknorris.io/jokes/search?query=${query}`);
         const response = await website.json();
-        console.log(response)
-        response.result.slice(0, 10).forEach((object, index) => {
-            const section = document.createElement('section');
-        
-            const count = document.createElement('h3');
-            count.textContent = `Joke #${index + 1}`;
-            section.appendChild(count);
-            const delivery = document.createElement('p');
-            delivery.textContent = `Joke: ${object.value}`;
-            section.appendChild(delivery);
-            output.appendChild(section);
-        })
+        if (response.error !== true){
+            response.result.slice(0, 10).forEach((object, index) => {
+                const section = document.createElement('section');
+            
+                const count = document.createElement('h3');
+                count.classList.add(`joke${index + 1}`)
+                count.textContent = `Joke #${index + 1}`;
+                count.setAttribute("data-url", object.url);
+                count.addEventListener('click', event => {
+                    event.preventDefault();
+                  
+                    const url = event.currentTarget.getAttribute("data-url");
+                  
+                    let favorites = JSON.parse(localStorage.getItem("favorite_urls")) || [];
+                  
+                    const index = favorites.indexOf(url);
+                  
+                    if (index !== -1) {
+                      favorites.splice(index, 1);
+                      console.log(`Removed joke from favorites: ${url}`);
+                    } else {
+                      favorites.push(url);
+                      console.log(`Added joke to favorites: ${url}`);
+                    }
+                  
+                    localStorage.setItem("favorite_urls", JSON.stringify(favorites));
+                  });
+
+                section.appendChild(count);
+                const delivery = document.createElement('p');
+                delivery.textContent = `Joke: ${object.value}`;
+                section.appendChild(delivery);
+                output.appendChild(section);
+            })
+        }else{
+            const output = document.querySelector('.program-joke');
+            const error = document.createElement('h1')
+            error.textContent = "No Jokes were found"
+            output.appendChild(error)
+            if (!multipleCategories) {
+                setTimeout(() => { window.location.href = "index.html" }, 2000);
+            }            
+        }
     }
 }
+
+document.querySelector('#logo').addEventListener('click', event => window.location.href = "index.html")
