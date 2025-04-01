@@ -170,4 +170,8 @@ header {
         max-width: 500px;
         top: 0;
     }
+    .search-box {
+        width: auto;
+        max-width: auto;
+    }
 }
