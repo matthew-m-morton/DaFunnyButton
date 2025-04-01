@@ -42,6 +42,7 @@ async function fetch_api(query, api, multipleCategories = false){
                 const section = document.createElement('section');                
                 const heart = document.createElement("p");
                 heart.textContent = "♥";
+                // target heart
                 const count = document.createElement('h3');
                 count.classList.add(`joke${index + 1}`)
                 count.textContent = `Joke #${index + 1}`;
