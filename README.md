@@ -15,3 +15,6 @@ https://icanhazdadjoke.com/
 tasks
 Matthew: Search engine
 Tyler: screen sizing
+
+things to address 
+- making the searchbar adaptive

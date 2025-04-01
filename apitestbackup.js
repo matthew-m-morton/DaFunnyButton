@@ -1,25 +1,3 @@
-async function fetchBannedWords() {
-    try {
-        const response = await fetch('https://github.com/dsojevic/profanity-list/blob/c27924319aa9bd6f917e3782b4f4b6604a50b652/en.json'); // Ensure correct path
-        const data = await response.json();
-
-        if (!Array.isArray(data)) {
-            throw new Error("Invalid JSON format: Expected an array of objects");
-        }
-
-        // Extract `match` fields and convert them into regex patterns
-        const regexList = data.map(item => new RegExp(item.match, "i")); 
-
-        console.log("Loaded banned word patterns:", regexList); // Debugging
-        return regexList;
-    } catch (error) {
-        console.error("Error fetching banned words:", error);
-        return [];
-    }
-}
-
-
-
 async function animateVacuumManAndShowJoke(jokeText) {
     const jokeElement = document.getElementById("jokeContainer");
     const vacuumManElement = document.getElementById("vacuum-man");
@@ -48,80 +26,55 @@ async function animateVacuumManAndShowJoke(jokeText) {
 }
 
 // Original Joke Functions (with sweeper logic added)
-
-async function fetchFilteredJoke(url) {
-    const bannedWords = await fetchBannedWords();
+async function getJoke() {
     try {
-        let joke = "";
-        let isClean = false;
+        const response = await fetch("https://v2.jokeapi.dev/joke/Any?blacklistFlags=nsfw,religious,political,racist,sexist,explicit");
+        const data = await response.json();
 
-        while (!isClean) {
-            const response = await fetch(url);
-            const data = await response.json();
-            joke = data.type === "single" ? data.joke : `${data.setup} - ${data.delivery}`;
-
-            isClean = !bannedWords.some(word => word.test(joke));
-        }
-
-        return joke;
+        let joke = data.type === "single" ? data.joke : `${data.setup} - ${data.delivery}`;
+        animateVacuumManAndShowJoke(joke);
     } catch (error) {
         console.error("Error fetching joke:", error);
-        return "Failed to load a joke. Try again!";
+        animateVacuumManAndShowJoke("Failed to load a joke. Try again!");
     }
 }
 
-async function getJoke() {
-    const joke = await fetchFilteredJoke("https://v2.jokeapi.dev/joke/Any?blacklistFlags=nsfw,religious,political,racist,sexist,explicit");
-    animateVacuumManAndShowJoke(joke);
-}
-
 async function getProgrammingJoke() {
-    const joke = await fetchFilteredJoke("https://v2.jokeapi.dev/joke/Programming?blacklistFlags=nsfw,religious,political,racist,sexist,explicit");
-    animateVacuumManAndShowJoke(joke);
+    try {
+        const response = await fetch("https://v2.jokeapi.dev/joke/Programming?blacklistFlags=nsfw,religious,political,racist,sexist,explicit");
+        const data = await response.json();
+
+        let joke = data.type === "single" ? data.joke : `${data.setup} - ${data.delivery}`;
+        animateVacuumManAndShowJoke(joke);
+    } catch (error) {
+        console.error("Error fetching joke:", error);
+        animateVacuumManAndShowJoke("Failed to load a joke. Try again!");
+    }
 }
 
 async function getDadJoke() {
-    const bannedWords = await fetchBannedWords();
     try {
-        let joke = "";
-        let isClean = false;
-
-        while (!isClean) {
-            const response = await fetch('https://icanhazdadjoke.com/', {
-                headers: { 'Accept': 'application/json' }
-            });
-            const data = await response.json();
-            joke = data.joke;
-            isClean = !bannedWords.some(word => word.test(joke));
-        }
-
-        animateVacuumManAndShowJoke(joke);
+        const response = await fetch('https://icanhazdadjoke.com/', {
+            headers: { 'Accept': 'application/json' }
+        });
+        const data = await response.json();
+        animateVacuumManAndShowJoke(data.joke);
     } catch (error) {
-        console.error("Error fetching Dad joke:", error);
+        console.error("Error fetching joke:", error);
         animateVacuumManAndShowJoke("Failed to load a Dad joke. Try again!");
     }
 }
 
 async function getChuckJoke() {
-    const bannedWords = await fetchBannedWords();
     try {
-        let joke = "";
-        let isClean = false;
-
-        while (!isClean) {
-            const response = await fetch('https://api.chucknorris.io/jokes/random');
-            const data = await response.json();
-            joke = data.value;
-            isClean = !bannedWords.some(word => word.test(joke));
-        }
-
-        animateVacuumManAndShowJoke(joke);
+        const response = await fetch('https://api.chucknorris.io/jokes/random');
+        const data = await response.json();
+        animateVacuumManAndShowJoke(data.value);
     } catch (error) {
         console.error("Error fetching Chuck Norris joke:", error);
         animateVacuumManAndShowJoke("Failed to load a Chuck Norris joke. Try again!");
     }
 }
-
 
 // Button event listeners
 document.getElementById("programbutton").addEventListener("click", getProgrammingJoke);
