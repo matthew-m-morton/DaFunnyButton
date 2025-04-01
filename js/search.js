@@ -40,7 +40,8 @@ async function fetch_api(query, api, multipleCategories = false){
 
             jokes.forEach((object, index) => {
                 const section = document.createElement('section');                
-            
+                const heart = document.createElement("p");
+                heart.textContent = "♥";
                 const count = document.createElement('h3');
                 count.classList.add(`joke${index + 1}`)
                 count.textContent = `Joke #${index + 1}`;
