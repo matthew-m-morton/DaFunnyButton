@@ -55,11 +55,19 @@ function unhide_advanced(event) {
 }
 document.querySelector('#advanced').addEventListener('click', unhide_advanced)
 
-function search_query(event) {
+async function search_query(event) {
     event.preventDefault()
+
+    const banned_list = await fetchBannedWords();
 
     const form = document.querySelector('.search-container')
     const query = form.search.value.trim()
+    const isClean = !banned_list.some(word => word.test(query));
+
+    if (!isClean){
+        document.querySelector('.search-box').value = ""
+        return
+    }
 
     const checkedTypes = Array.from(form.querySelectorAll('input[name="drop"]:checked')).map(checkbox => checkbox.value)
 
@@ -79,3 +87,21 @@ document.querySelector('.heart').addEventListener('click', event => {
     event.preventDefault()
     window.location.href = 'favorites.html'
 })
+
+async function fetchBannedWords() {
+    try {
+        const response = await fetch('./en.json'); // Ensure correct path
+        const data = await response.json();
+
+        if (!Array.isArray(data)) {
+            throw new Error("Invalid JSON format: Expected an array of objects");
+        }
+
+        // Extract `match` fields and convert them into regex patterns
+        const regexList = data.map(item => new RegExp(item.match, "i"));
+        return regexList;
+    } catch (error) {
+        console.error("Error fetching banned words:", error);
+        return [];
+    }
+}

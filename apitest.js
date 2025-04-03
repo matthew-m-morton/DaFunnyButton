@@ -8,9 +8,7 @@ async function fetchBannedWords() {
         }
 
         // Extract `match` fields and convert them into regex patterns
-        const regexList = data.map(item => new RegExp(item.match, "i")); 
-
-        console.log("Loaded banned word patterns:", regexList); // Debugging
+        const regexList = data.map(item => new RegExp(item.match, "i"));
         return regexList;
     } catch (error) {
         console.error("Error fetching banned words:", error);
