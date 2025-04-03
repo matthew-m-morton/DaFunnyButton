@@ -1,6 +1,6 @@
 async function fetchBannedWords() {
     try {
-        const response = await fetch('https://github.com/dsojevic/profanity-list/blob/c27924319aa9bd6f917e3782b4f4b6604a50b652/en.json'); // Ensure correct path
+        const response = await fetch('./en.json'); // Ensure correct path
         const data = await response.json();
 
         if (!Array.isArray(data)) {
