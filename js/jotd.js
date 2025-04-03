@@ -73,3 +73,9 @@ function search_query(event) {
 }
 
 document.querySelector('.search-container').addEventListener('submit', search_query);
+
+
+document.querySelector('.heart').addEventListener('click', event => {
+    event.preventDefault()
+    window.location.href = 'favorites.html'
+})

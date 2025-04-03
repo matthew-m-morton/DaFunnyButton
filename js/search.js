@@ -39,15 +39,19 @@ async function fetch_api(query, api, multipleCategories = false){
             const jokes = response.jokes || [response];
 
             jokes.forEach((object, index) => {
-                const section = document.createElement('section');                
+                const section = document.createElement('section');
+                const div = document.createElement('div');
+                div.classList.add('title')              
                 const heart = document.createElement("p");
                 heart.textContent = "♥";
+                heart.setAttribute("data-url", `https://v2.jokeapi.dev/joke/Programming?blacklistFlags=nsfw,religious,political,racist,sexist,explicit&idRange=${object.id}`);
+                heart.classList.add(`joke${index + 1}`)
+                div.appendChild(heart)
                 // target heart
                 const count = document.createElement('h3');
-                count.classList.add(`joke${index + 1}`)
                 count.textContent = `Joke #${index + 1}`;
-                count.setAttribute("data-url", `https://v2.jokeapi.dev/joke/Programming?blacklistFlags=nsfw,religious,political,racist,sexist,explicit&idRange=${object.id}`);
-                count.addEventListener('click', event => {
+                
+                heart.addEventListener('click', event => {
                     event.preventDefault();
                   
                     const url = event.currentTarget.getAttribute("data-url");
@@ -67,7 +71,8 @@ async function fetch_api(query, api, multipleCategories = false){
                     localStorage.setItem("favorite_urls", JSON.stringify(favorites));
                 });
                 
-                section.appendChild(count);
+                div.appendChild(count)
+                section.appendChild(div);
             
                 if (object.type === "twopart") {
                     const setup = document.createElement('p');
@@ -103,12 +108,19 @@ async function fetch_api(query, api, multipleCategories = false){
             console.log(data)
             data.results.forEach((object, index) => {
                 const section = document.createElement('section');
-        
+                
+                const div = document.createElement('div');
+                div.classList.add('title')              
+                const heart = document.createElement("p");
+                heart.textContent = "♥";
+                heart.setAttribute("data-url", `https://icanhazdadjoke.com/j/${object.id}`);
+                div.appendChild(heart)
+
                 const count = document.createElement('h3');
                 count.classList.add(`joke${index + 1}`)
                 count.textContent = `Joke #${index + 1}`;
-                count.setAttribute("data-url", `https://icanhazdadjoke.com/j/${object.id}`);
-                count.addEventListener('click', event => {
+                
+                heart.addEventListener('click', event => {
                     event.preventDefault();
                   
                     const url = event.currentTarget.getAttribute("data-url");
@@ -128,7 +140,8 @@ async function fetch_api(query, api, multipleCategories = false){
                     localStorage.setItem("favorite_urls", JSON.stringify(favorites));
                 });
 
-                section.appendChild(count);
+                div.appendChild(count);
+                section.appendChild(div)
                 const delivery = document.createElement('p');
                 delivery.textContent = `Joke: ${object.joke}`;
                 section.appendChild(delivery);
@@ -151,12 +164,18 @@ async function fetch_api(query, api, multipleCategories = false){
         if (response.error !== true){
             response.result.slice(0, 10).forEach((object, index) => {
                 const section = document.createElement('section');
-            
+                const div = document.createElement('div');
+                div.classList.add('title')              
+                const heart = document.createElement("p");
+                heart.textContent = "♥";
+                heart.setAttribute("data-url", object.url);
+                div.appendChild(heart)
+
                 const count = document.createElement('h3');
                 count.classList.add(`joke${index + 1}`)
                 count.textContent = `Joke #${index + 1}`;
-                count.setAttribute("data-url", object.url);
-                count.addEventListener('click', event => {
+                
+                heart.addEventListener('click', event => {
                     event.preventDefault();
                   
                     const url = event.currentTarget.getAttribute("data-url");
@@ -176,7 +195,8 @@ async function fetch_api(query, api, multipleCategories = false){
                     localStorage.setItem("favorite_urls", JSON.stringify(favorites));
                   });
 
-                section.appendChild(count);
+                div.appendChild(count);
+                section.appendChild(div)
                 const delivery = document.createElement('p');
                 delivery.textContent = `Joke: ${object.value}`;
                 section.appendChild(delivery);
