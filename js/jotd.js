@@ -1,4 +1,8 @@
 document.addEventListener("DOMContentLoaded", function() {
+
+    if (window.localStorage.getItem("naughty")){
+        window.location.href = "banned.html"
+    }
     // Declare async function to fetch the joke
     async function fetchJoke() {
         const modal = document.getElementById("joke-modal");
@@ -66,6 +70,8 @@ async function search_query(event) {
 
     if (!isClean){
         document.querySelector('.search-box').value = ""
+        window.localStorage.setItem("naughty", "true")
+        window.location.href = "banned.html"
         return
     }
 
